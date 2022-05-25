@@ -9,6 +9,7 @@ namespace Extcode\CartEvents\Controller;
  * LICENSE file that was distributed with this source code.
  */
 
+use Psr\Http\Message\ResponseInterface;
 use Extcode\Cart\Utility\CartUtility;
 use Extcode\CartEvents\Domain\Model\Dto\EventDemand;
 use Extcode\CartEvents\Domain\Model\Event;
@@ -77,7 +78,7 @@ class EventController extends ActionController
         }
     }
 
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         if (!$this->settings) {
             $this->settings = [];
@@ -91,9 +92,10 @@ class EventController extends ActionController
         $this->view->assign('cartSettings', $this->cartSettings);
 
         $this->addCacheTags($events);
+        return $this->htmlResponse();
     }
 
-    public function teaserAction(): void
+    public function teaserAction(): ResponseInterface
     {
         $limit = (int)$this->settings['limit'] ?: (int)$this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
@@ -106,12 +108,14 @@ class EventController extends ActionController
         $this->view->assign('cartSettings', $this->cartSettings);
 
         $this->addCacheTags($events);
+
+        return $this->htmlResponse();
     }
 
     /**
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("event")
      */
-    public function showAction(Event $event = null): void
+    public function showAction(Event $event = null): ResponseInterface
     {
         if (!$event) {
             $event = $this->getEvent();
@@ -126,13 +130,14 @@ class EventController extends ActionController
         $this->assignCurrencyTranslationData();
 
         $this->addCacheTags([$event]);
+        return $this->htmlResponse();
     }
 
     /**
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("eventDate")
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("priceCategory")
      */
-    public function formAction(EventDate $eventDate = null, PriceCategory $priceCategory = null): void
+    public function formAction(EventDate $eventDate = null, PriceCategory $priceCategory = null): ResponseInterface
     {
         if (!$eventDate) {
             $arguments = $this->request->getArguments();

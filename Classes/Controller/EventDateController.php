@@ -10,6 +10,7 @@ namespace Extcode\CartEvents\Controller;
  */
 
 use Extcode\CartEvents\Domain\Repository\EventDateRepository;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -37,7 +38,7 @@ class EventDateController extends ActionController
         }
     }
 
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         if (!$this->settings) {
             $this->settings = [];
@@ -57,6 +58,8 @@ class EventDateController extends ActionController
         $this->view->assign('eventDates', $eventDates);
 
         $this->addCacheTags($eventDates);
+
+        return $this->htmlResponse();
     }
 
     protected function addCacheTags(iterable $eventDates): void
