@@ -128,7 +128,7 @@ class AddToCartFinisher implements AddToCartFinisherInterface
                 ];
 
                 $_procObj = GeneralUtility::makeInstance($className);
-                $_procObj->changeProductFromEventDate($product, $params);
+                $product = $_procObj->changeProductFromEventDate($product, $params);
             }
         }
 
